@@ -40,7 +40,7 @@ const GAME_CHANNELS = {
         name: "Late Night Games 3",
         id: "1501864559961571400"
     },
-	games4: {
+	private: {
 		name: "Private",
 		id: "1501864963952742541"
 	},
@@ -98,10 +98,6 @@ const rest = new REST({ version: '10' }).setToken(TOKEN);
     );
     console.log('Slash commands registered');
 })();
-
-client.once('ready', () => {
-    console.log(`${client.user.tag} is online`);
-});
 
 client.on('guildMemberAdd', async member => {
 
@@ -165,7 +161,7 @@ client.on('interactionCreate', async interaction => {
                     .setStyle(ButtonStyle.Primary),
 					
 				new ButtonBuilder()
-					.setCustomId('request_games4')
+					.setCustomId('request_private')
 					.setLabel('Join Private Call')
 					.setStyle(ButtonStyle.Secondary)
             );
@@ -291,6 +287,13 @@ client.on('interactionCreate', async interaction => {
 
             const gameKey = interaction.customId.split('_')[1];
             const game = GAME_CHANNELS[gameKey];
+			
+			if (!game) {
+				return interaction.reply({
+					content: 'Invalid request type.',
+					ephemeral: true
+				});
+			}
 
             let targetChannelId = REQUESTS_CHANNEL_ID;
 
@@ -300,7 +303,14 @@ client.on('interactionCreate', async interaction => {
 
 			const channel =
 				interaction.guild.channels.cache.get(targetChannelId);
-
+				
+			if (!channel) {
+				return interaction.reply({
+					content: 'Request channel not found.',
+					ephemeral: true
+				});
+			}
+			
             const embed = new EmbedBuilder()
                 .setTitle('Game Request')
                 .setDescription(`${member} requested **${game.name}**`)
