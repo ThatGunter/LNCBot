@@ -35,7 +35,11 @@ const GAME_CHANNELS = {
     games3: {
         name: "Late Night Games 3",
         id: "1501864559961571400"
-    }
+    },
+	games4: {
+		name: "Private",
+		id: "1501864963952742541"
+	},
 };
 
 const client = new Client({
@@ -146,7 +150,12 @@ client.on('interactionCreate', async interaction => {
                 new ButtonBuilder()
                     .setCustomId('request_games3')
                     .setLabel('Late Night Games 3')
-                    .setStyle(ButtonStyle.Primary)
+                    .setStyle(ButtonStyle.Primary),
+					
+				new ButtonBuilder()
+					.setCustomId('request_games4')
+					.setLabel('Join Private Call')
+					.setStyle(ButtonStyle.Secondary)
             );
 
             await channel.send({
