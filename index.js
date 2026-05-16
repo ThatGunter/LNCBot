@@ -10,6 +10,9 @@ const {
     REST
 } = require('discord.js');
 
+const express = require('express');
+const app = express();
+
 // IMPORTANT: Use environment variable OR replace with your NEW token
 const TOKEN = process.env.TOKEN;
 
@@ -117,6 +120,14 @@ client.on('guildMemberAdd', async member => {
     } catch (err) {
         console.error(err);
     }
+});
+
+app.get('/', (req, res) => {
+    res.send('Bot is running');
+});
+
+app.listen(3000, () => {
+    console.log('Express server running on port 3000');
 });
 
 client.on('interactionCreate', async interaction => {
