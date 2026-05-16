@@ -19,6 +19,7 @@ const GUILD_ID = '1501863034866630697';
 const REQUEST_CHANNEL_ID = '1501866176039489566';
 const REQUESTS_CHANNEL_ID = '1501866222285750373';
 const WAIT_CHANNEL_ID = '1501866198059581463';
+const PRIVATE_REQUESTS_CHANNEL_ID = '1501864935678939226';
 
 const CREW_ROLE = 'Late Night Crew';
 const ADMIN_ROLE = 'Admin';
@@ -280,8 +281,14 @@ client.on('interactionCreate', async interaction => {
             const gameKey = interaction.customId.split('_')[1];
             const game = GAME_CHANNELS[gameKey];
 
-            const channel =
-                interaction.guild.channels.cache.get(REQUESTS_CHANNEL_ID);
+            let targetChannelId = REQUESTS_CHANNEL_ID;
+
+			if (gameKey === 'private') {
+				targetChannelId = PRIVATE_REQUESTS_CHANNEL_ID;
+			}
+
+			const channel =
+				interaction.guild.channels.cache.get(targetChannelId);
 
             const embed = new EmbedBuilder()
                 .setTitle('Game Request')
